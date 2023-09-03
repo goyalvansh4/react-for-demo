@@ -1,13 +1,36 @@
 "use client"
+import axios from "axios";
 import React, { useState } from "react"
-import Header from "@/Components/Header"
+
 const page = () => {
-  const [user,setUser]  = useState("Vansh");
+  const [Images,setImages] = useState([]);
+
+  const getImages = async () =>{
+    try{
+    const response = await axios.get("https://picsum.photos/v2/list");
+    const data=response.data;
+      
+     setImages(data);
+     console.log(Images);
+    }
+    catch(error){
+      console.error("Error Fetching Images");
+    }
+  };
   return (
-    <>
-    <Header user={user}/>
-    <div>{user}</div>
-    </>
+    <div>
+      <button onClick={getImages} className="px-5 py-3 bg-green-600 text-white rounded">Get Image</button>
+      <div className="p-10">
+          {Images.map((elem,i)=>{
+           return <img
+           key={i}
+           src={elem.download_url}
+           width={300}
+           height={300}
+           className="m-10 rounded inline-block"/>
+          })}
+      </div>
+    </div>
   )
 };
 
